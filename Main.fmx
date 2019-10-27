@@ -1,0 +1,154 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  ActiveControl = mmoHistory
+  Caption = #50629#48708#53944' '#44144#47000' '#45236#50669' TSV '#48320#54872#44592
+  ClientHeight = 301
+  ClientWidth = 540
+  Position = DesktopCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object btnConvert: TButton
+    Anchors = [akLeft, akRight, akBottom]
+    Position.X = 8.000000000000000000
+    Position.Y = 255.000000000000000000
+    Size.Width = 522.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = 'TSV'#47196' '#48320#54872#54644#49436' '#53364#47549#48372#46300#50640' '#48537#50668#45347#44592
+    OnClick = btnConvertClick
+  end
+  object mmoHistory: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Position.X = 8.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 522.000000000000000000
+    Size.Height = 158.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 518.000000000000000000
+    Viewport.Height = 154.000000000000000000
+  end
+  object Label1: TLabel
+    AutoSize = True
+    Position.X = 8.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 265.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = #44144#47000' '#45236#50669#51012' '#50500#47000#50640' '#48537#50668#45347#44256' '#48260#53948#51012' '#45580#47084#51452#49464#50836'.'
+    TabOrder = 2
+  end
+  object lblWebsite: TLabel
+    Cursor = crHandPoint
+    StyledSettings = [Family, Size, Style]
+    Hint = #51060#49836#45208#46972
+    HitTest = True
+    Position.X = 336.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.FontColor = claDarkslateblue
+    TextSettings.HorzAlign = Trailing
+    Text = 'https://isulnara.com/'
+    TabOrder = 3
+    OnClick = lblWebsiteClick
+  end
+  object grpOption: TGroupBox
+    Anchors = [akLeft, akTop, akRight]
+    Position.X = 8.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 522.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    Text = #50741#49496
+    TabOrder = 7
+    object rbSpace: TRadioButton
+      IsChecked = True
+      Position.X = 8.000000000000000000
+      Position.Y = 20.000000000000000000
+      Size.Width = 145.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+      Text = #53076#51064#47749' '#50526#50640' '#44277#48177' '#52628#44032
+    end
+    object rbTab: TRadioButton
+      Position.X = 160.000000000000000000
+      Position.Y = 20.000000000000000000
+      Size.Width = 137.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Text = #53076#51064#47749' '#50526#50640' '#53485' '#52628#44032
+    end
+    object rbNone: TRadioButton
+      Position.X = 304.000000000000000000
+      Position.Y = 20.000000000000000000
+      Size.Width = 137.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 9
+      Text = #53076#51064#47749' '#44536#45824#47196' '#49324#50857
+    end
+  end
+  object rstclntMarket: TRESTClient
+    Accept = 'application/json, text/plain; q=0.9, text/html;q=0.8,'
+    AcceptCharset = 'utf-8, *;q=0.8'
+    BaseURL = 'https://api.upbit.com/v1/market/all'
+    Params = <>
+    RaiseExceptionOn500 = False
+    Left = 104
+    Top = 112
+  end
+  object rstrqstMarket: TRESTRequest
+    Client = rstclntMarket
+    Params = <>
+    Response = rstrspnsMarekt
+    SynchronizedEvents = False
+    Left = 192
+    Top = 112
+  end
+  object rstrspnsMarekt: TRESTResponse
+    Left = 288
+    Top = 112
+  end
+  object rstclntVersion: TRESTClient
+    Accept = 
+      'application/json,text/html,application/xhtml+xml,application/xml' +
+      ';q=0.9,*/*;q=0.8'
+    AcceptCharset = 'utf-8, *;q=0.8'
+    BaseURL = 
+      'https://com-isulnara-datastore.appspot.com/data/upbithist2tsv/co' +
+      'nvert/com.isulnara.upbithist2tsv.version'
+    Params = <>
+    RaiseExceptionOn500 = False
+    Left = 104
+    Top = 176
+  end
+  object rstrqstVersion: TRESTRequest
+    Accept = 
+      'application/json,text/html,application/xhtml+xml,application/xml' +
+      ';q=0.9,*/*;q=0.8'
+    Client = rstclntVersion
+    Params = <>
+    Response = rstrspnsVersion
+    SynchronizedEvents = False
+    Left = 192
+    Top = 176
+  end
+  object rstrspnsVersion: TRESTResponse
+    ContentType = 'Content-Type: application/json;charset=utf-8'
+    ContentEncoding = 'utf-8'
+    Left = 288
+    Top = 176
+  end
+end
