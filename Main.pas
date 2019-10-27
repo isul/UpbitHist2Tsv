@@ -76,9 +76,9 @@ procedure TfrmMain.btnConvertClick(Sender: TObject);
 var
   i, j: Integer;
   Row, CsvResult: string;
-  clp: IFMXClipboardService;
-  ja: TJSONArray;
-  jo: TJSONObject;
+  Clp: IFMXClipboardService;
+  JaRoot: TJSONArray;
+  JoMarket: TJSONObject;
   Market, Currency: string;
   Dictionary: TDictionary<string, string>;
   Key: string;
@@ -113,14 +113,14 @@ begin
         begin
           Dictionary := TDictionary<string, string>.Create();
           try
-            ja := rstrspnsMarekt.JSONValue as TJSONArray;
-            for j := 0 to ja.Count - 1 do
+            JaRoot := rstrspnsMarekt.JSONValue as TJSONArray;
+            for j := 0 to JaRoot.Count - 1 do
               begin
-                if ja.Items[j] is TJSONObject then
+                if JaRoot.Items[j] is TJSONObject then
                   begin
-                    jo := ja.Items[j] as TJSONObject;
-                    Market := Copy(jo.GetValue('market').Value, 0, Pos('-', jo.GetValue('market').Value) - 1);
-                    Currency := jo.GetValue('market').Value.Replace(Market + '-', '');
+                    JoMarket := JaRoot.Items[j] as TJSONObject;
+                    Market := Copy(JoMarket.GetValue('market').Value, 0, Pos('-', JoMarket.GetValue('market').Value) - 1);
+                    Currency := JoMarket.GetValue('market').Value.Replace(Market + '-', '');
                     if not Dictionary.ContainsKey(Market) then
                       Dictionary.Add(Market, Market);
                     if not Dictionary.ContainsKey(Currency) then
@@ -137,9 +137,9 @@ begin
     end;
 
   // 결과 클립보드에 붙여넣기
-  if TryGetClipboardService(clp) then
+  if TryGetClipboardService(Clp) then
     begin
-      clp.SetClipboard(CsvResult);
+      Clp.SetClipboard(CsvResult);
       ShowMessage('변환된 내용이 클립보드에 복사되었습니다.');
     end
   else
@@ -151,10 +151,10 @@ function TfrmMain.OccurrencesOfChar(const S: string; const C: char): Integer;
 var
   i: Integer;
 begin
-  result := 0;
+  Result := 0;
   for i := 1 to Length(S) do
     if S[i] = C then
-      inc(result);
+      Inc(Result);
 end;
 
 
@@ -170,8 +170,8 @@ end;
 
 procedure TfrmMain.CheckVersion;
 var
-  jo: TJSONObject;
-  Data: TJSONObject;
+  JoRoot: TJSONObject;
+  JoData: TJSONObject;
   NewVersion: string;
 begin
   if FCheckVersion then
@@ -181,15 +181,15 @@ begin
   rstrqstVersion.Execute;
   if rstrspnsVersion.JSONValue is TJSONObject then
     begin
-      jo := rstrspnsVersion.JSONValue as TJSONObject;
-      if jo.GetValue('success') is TJSONTrue then
+      JoRoot := rstrspnsVersion.JSONValue as TJSONObject;
+      if JoRoot.GetValue('success') is TJSONTrue then
         begin
-          Data := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(jo.GetValue('extra').Value.Replace('\', '')), 0) as TJSONObject;
-          NewVersion := Data.GetValue('dataValue').Value;
+          JoData := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(JoRoot.GetValue('extra').Value.Replace('\', '')), 0) as TJSONObject;
+          NewVersion := JoData.GetValue('dataValue').Value;
           if APP_VERSION <> NewVersion then
             begin
               ShowMessage('새 버전이 출시되었습니다. 최신 버전으로 업데이트하세요.'#13#10
-                          + StringOfChar('─', 27) + #13#10 + Data.GetValue('dataDesc').Value);
+                          + StringOfChar('─', 27) + #13#10 + JoData.GetValue('dataDesc').Value);
               OpenUrl(APP_URL);
             end;
         end;
